@@ -1,26 +1,23 @@
 # frontend/Dockerfile
 
-# --- Estágio 1: Builder ---
-FROM node:18-alpine AS builder
+# Usamos a imagem Node.js como base
+FROM node:18-alpine
 
+# Define o diretório de trabalho
 WORKDIR /app
 
-# Otimização: Copia ambos os ficheiros de uma só vez.
-# O '?' torna o package-lock.json opcional, evitando erros se ele não existir.
+# Copia os ficheiros de manifesto de dependências para aproveitar o cache
 COPY package*.json ./
 
+# Instala as dependências
 RUN npm install
 
-# --- ERRO CORRIGIDO ---
-# Esta linha estava em falta. Ela copia todo o código-fonte.
+# Copia o resto do código da aplicação
 COPY . .
 
-RUN npm run build
+# Expõe a porta 3000, que é a porta padrão do servidor de desenvolvimento do React
+EXPOSE 3000
 
+# Comando para iniciar o servidor de desenvolvimento quando o container arrancar
+CMD ["npm", "start"]
 
-# --- Estágio 2: Final ---
-FROM nginx:1.25-alpine
-
-COPY --from=builder /app/build /usr/share/nginx/html
-
-EXPOSE 80

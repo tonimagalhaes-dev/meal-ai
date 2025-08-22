@@ -7,6 +7,7 @@ FROM python:3.11-slim AS builder
 # Define o diretório de trabalho dentro do container
 WORKDIR /app
 
+
 # Cria um ambiente virtual para isolar as dependências
 RUN python -m venv /opt/venv
 # Ativa o ambiente virtual para os comandos seguintes NESTE ESTÁGIO
@@ -46,4 +47,4 @@ COPY ./app /app/app
 EXPOSE 8000
 
 # Comando para iniciar a aplicação quando o container arrancar
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]

@@ -1,73 +1,46 @@
 # docker-compose.yml
 
-# Define a versão do Docker Compose que estamos usando.
-version: '3.8'
-
-# A seção 'services' é onde definimos cada um dos nossos contêineres.
 services:
   # --- Serviço do Backend (API FastAPI) ---
   api:
-    # 'build' diz ao Docker Compose para construir a imagem a partir de um Dockerfile.
-    # '.' significa que o contexto é o diretório do backend.
     build: ./backend
-    # 'container_name' dá um nome fácil de identificar ao nosso contêiner.
     container_name: mealia_api
-    # 'ports' mapeia a porta do seu computador (host) para a porta do contêiner.
-    # Acessar localhost:8000 no seu navegador irá redirecionar para a porta 8000 do contêiner.
     ports:
       - "8000:8000"
-    # 'volumes' sincroniza uma pasta do seu computador com uma pasta dentro do contêiner.
-    # Isto é o que permite o "hot reload": quando você salva um arquivo no seu VS Code,
-    # ele é atualizado instantaneamente dentro do contêiner.
     volumes:
       - ./backend/app:/app/app
-    # 'environment' define variáveis de ambiente para o serviço.
-    # Aqui, vamos configurar a conexão com o banco de dados.
     environment:
       - DATABASE_URL=postgresql://user:password@db:5432/mealiadb
-    # 'depends_on' garante que o contêiner do banco de dados ('db') seja iniciado antes do contêiner da API.
     depends_on:
       - db
 
   # --- Serviço do Frontend (React App) ---
   web:
-    # Constrói a imagem a partir do Dockerfile na pasta 'frontend'.
     build: ./frontend
     container_name: mealia_web
-    # Mapeia a porta 3000 do seu computador para a porta 80 do contêiner (onde o Nginx está rodando).
     ports:
-      - "3000:80"
-    # Sincroniza o código-fonte do React para permitir o hot reload.
-    # Nota: O hot-reload do React com Nginx requer uma configuração mais avançada.
-    # Para desenvolvimento, é mais comum rodar o servidor de desenvolvimento do React diretamente.
-    # Esta configuração é mais para ver o resultado do build.
+      - "3000:3000"
     volumes:
-      - ./frontend/src:/app/src
-    # Garante que a API ('api') esteja disponível antes do frontend iniciar.
-    depends_on:
-      - api
+      - ./frontend:/app
+      - /app/node_modules
+    # Força o servidor de desenvolvimento a usar o "polling" para detectar
+    # alterações de arquivos, o que é mais confiável no Docker/Windows.
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - WDS_SOCKET_PORT=0
 
   # --- Serviço do Banco de Dados (PostgreSQL) ---
   db:
-    # Usa a imagem oficial do PostgreSQL da versão 13.
     image: postgres:13-alpine
     container_name: mealia_db
-    # 'volumes' para o banco de dados são essenciais para persistir os dados.
-    # Se você remover o contêiner, os dados no volume 'postgres_data' permanecerão.
     volumes:
       - postgres_data:/var/lib/postgresql/data/
-    # Define as variáveis de ambiente necessárias para o PostgreSQL iniciar.
-    # CUIDADO: Nunca use estas senhas em produção!
     environment:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=mealiadb
-    # Mapeia a porta 5432 do seu computador para a porta 5432 do contêiner,
-    # permitindo que você se conecte ao banco com o DBeaver.
     ports:
       - "5432:5432"
 
-# A seção 'volumes' no nível raiz declara os volumes nomeados que usamos.
-# O Docker gerencia a localização física destes volumes.
 volumes:
   postgres_data:
