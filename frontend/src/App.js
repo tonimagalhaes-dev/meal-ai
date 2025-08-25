@@ -7,7 +7,7 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Bem vindo ao Meal-AI, seu app de cardápios inteligente.
+          Bem vindo ao Meal-AI, seu app de cardápios inteligente. - 25/08/2025
         </p>
         <a
           className="App-link"
