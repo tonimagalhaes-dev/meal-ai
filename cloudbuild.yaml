@@ -44,14 +44,13 @@ steps:
         npm run build
         echo "Frontend build concluído!"
 
-
-# Passo 5: Deploy no Firebase Hosting
-#  - name: 'gcr.io/$PROJECT_ID/firebase'
-#    args: [
-#      'deploy',
-#      '--only', 'hosting',
-#      '--project', '$PROJECT_ID'
-#    ]
+  # Passo 5: Deploy no Firebase Hosting
+  - name: 'gcr.io/$PROJECT_ID/firebase'
+    args: [
+      'deploy',
+      '--only', 'hosting',
+      '--project', '$PROJECT_ID'
+    ]
 
 # Configurações do build (Otimizado para Free Tier)
 options:
