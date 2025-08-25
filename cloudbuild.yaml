@@ -1,4 +1,5 @@
-# cloudbuild.yaml
+
+#teste pipeline free tier
 # Pipeline de CI/CD para o MealIA no Google Cloud Platform
 
 steps:
