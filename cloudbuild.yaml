@@ -1,27 +1,26 @@
-
-#teste pipeline free tier
+# cloudbuild.yaml
 # Pipeline de CI/CD para o MealIA no Google Cloud Platform
 
 steps:
   # Passo 1: Build da imagem do Backend (FastAPI)
-  - name: 'us-east1-docker.pkg.dev/cloud-builders/docker'
+  - name: 'gcr.io/cloud-builders/docker'
     args: [
       'build', 
-      '-t', 'us-east1-docker.pkg.dev/$PROJECT_ID/mealia-backend:$BUILD_ID',
-      '-t', 'us-east1-docker.pkg.dev/$PROJECT_ID/mealia-backend:latest',
+      '-t', 'gcr.io/$PROJECT_ID/mealia-backend:$BUILD_ID',
+      '-t', 'gcr.io/$PROJECT_ID/mealia-backend:latest',
       '--build-arg', 'ENVIRONMENT=production',
       './backend'
     ]
 
   # Passo 2: Push da imagem para Container Registry
-  - name: 'us-east1-docker.pkg.dev/cloud-builders/docker'
-    args: ['push', '--all-tags', 'us-east1-docker.pkg.dev/$PROJECT_ID/mealia-backend']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', '--all-tags', 'gcr.io/$PROJECT_ID/mealia-backend']
 
   # Passo 3: Deploy no Cloud Run (Otimizado para Free Tier)
-  - name: 'us-east1-docker.pkg.dev/cloud-builders/gcloud'
+  - name: 'gcr.io/cloud-builders/gcloud'
     args: [
       'run', 'deploy', 'mealia-backend',
-      '--image', 'us-east1-docker.pkg.dev/$PROJECT_ID/mealia-backend:$BUILD_ID',
+      '--image', 'gcr.io/$PROJECT_ID/mealia-backend:$BUILD_ID',
       '--platform', 'managed',
       '--region', 'us-east1',  # Região com Free Tier mais generoso
       '--allow-unauthenticated',
@@ -45,13 +44,14 @@ steps:
         npm run build
         echo "Frontend build concluído!"
 
-  # Passo 5: Deploy no Firebase Hosting
-  - name: 'us-east1-docker.pkg.dev/$PROJECT_ID/firebase'
-    args: [
-      'deploy',
-      '--only', 'hosting',
-      '--project', '$PROJECT_ID'
-    ]
+
+# Passo 5: Deploy no Firebase Hosting
+#  - name: 'gcr.io/$PROJECT_ID/firebase'
+#    args: [
+#      'deploy',
+#      '--only', 'hosting',
+#      '--project', '$PROJECT_ID'
+#    ]
 
 # Configurações do build (Otimizado para Free Tier)
 options:
