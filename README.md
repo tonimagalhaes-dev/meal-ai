@@ -55,4 +55,4 @@ Se encontrar erros inesperados, especialmente relacionados com o uvicorn ou cach
 2. **Limpeza profunda do sistema Docker (remove todo o cache):**  
    docker system prune \-a \-f
 
-Depois de executar a limpeza, tente iniciar o ambiente novamente com docker-compose up \--build.
+Depois de executar a limpeza, tente iniciar o ambiente novamente com docker-compose up \--build."# MealIA - Deploy Test" 
