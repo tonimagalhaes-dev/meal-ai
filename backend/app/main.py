@@ -10,4 +10,4 @@ app = FastAPI(
 
 @app.get("/", tags=["Root"])
 def read_root():
-    return {"message": "Bem-vindo à API do Meal-AI! - com hot reload"}
+    return {"message": "Bem-vindo à API do Meal-AI! - com hot reload 25/08/2025"}

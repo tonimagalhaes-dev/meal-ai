@@ -1,6 +1,6 @@
 # Contexto do Projeto MealIA
 
-Este documento serve como um ponto de partida para contextualizar o assistente de IA sobre o estado atual, objetivos e stack tecnológico do projeto MealIA. **Última atualização: 21/08/2025.**
+Este documento serve como um ponto de partida para contextualizar o assistente de IA sobre o estado atual, objetivos e stack tecnológico do projeto MealIA. **Última atualização: 22/08/2025.**
 
 ## 1. Resumo do Projeto (O Quê e Por Quê)
 
@@ -42,6 +42,12 @@ O projeto está organizado em 4 Épicos principais, geridos como Issues no GitHu
 ### Progresso Atual
 * **21/08/2025:** A **User Story 1.1 foi concluída com sucesso!** O ambiente de desenvolvimento local está 100% funcional, com backend, frontend e banco de dados a correr de forma orquestrada pelo Docker Compose.
 
+* **22/08/2025:** **Progresso significativo na User Story 1.2!** A configuração inicial do GCP foi concluída com sucesso:
+  - ✅ Projeto GCP criado: `meal-ai-development`
+  - ✅ Todas as APIs necessárias ativadas (Cloud Run, Cloud Build, Firebase Hosting, Cloud SQL, Secret Manager)
+  - ✅ Orçamento configurado (R$50/mês com alertas em 50%, 90% e 100%)
+  - ✅ Google Cloud CLI instalado e configurado no ambiente Windows
+
 ---
 ### **✅ Story 1.1: Configuração do Ambiente de Desenvolvimento Local (CONCLUÍDA)**
 
@@ -54,16 +60,40 @@ O projeto está organizado em 4 Épicos principais, geridos como Issues no GitHu
 * [x] O front-end em React reinicia automaticamente ao salvar alterações no código (`hot reload`).
 
 ---
-### **Story 1.2: Setup do Projeto GCP e Deploy Contínuo no Cloud Run (PRÓXIMO PASSO)**
+### **🚧 Story 1.2: Setup do Projeto GCP e Deploy Contínuo no Cloud Run (EM PROGRESSO)**
 
 **Como** desenvolvedor, **Eu quero** configurar o projeto na Google Cloud e um pipeline de CI/CD, **Para que** cada *push* para a branch principal (`main`) seja automaticamente testado e implantado, disponibilizando a aplicação na nuvem.
 
 **Critérios de Aceitação:**
 
-* [ ] O projeto no GCP está configurado com as APIs necessárias e Service Accounts seguras.
+* [x] O projeto no GCP está configurado com as APIs necessárias e Service Accounts seguras.
 * [ ] O pipeline de CI/CD (Cloud Build) é acionado a cada `push` na branch `main`.
 * [ ] O pipeline executa os testes, constrói a imagem do back-end e a implanta no Cloud Run.
 * [ ] O pipeline faz o build dos arquivos estáticos do front-end (React) e os implanta no Firebase Hosting.
+
+**Progresso Atual:**
+- ✅ **Fase 1: Configuração Inicial do GCP** - CONCLUÍDA
+  - Projeto GCP criado com sucesso
+  - Todas as APIs necessárias ativadas
+  - Orçamento e alertas configurados
+  - Google Cloud CLI instalado e autenticado
+
+**Próximos Passos:**
+- 📋 **Fase 2: Service Accounts e Permissões**
+  - Criar Service Account para deploy automático
+  - Configurar IAM roles necessárias
+  - Gerar e configurar chaves de autenticação
+
+- 📋 **Fase 3: Preparação do Código para Deploy**
+  - Ajustar Dockerfiles para produção
+  - Configurar variáveis de ambiente
+  - Preparar frontend para build estático
+
+- 📋 **Fase 4: Pipeline CI/CD**
+  - Criar arquivo cloudbuild.yaml
+  - Configurar triggers automáticos
+  - Setup do Firebase Hosting
+  - Testar deploy completo
 
 ---
 ### **Story 1.3: Conectividade com o Banco de Dados Cloud SQL**
@@ -78,7 +108,27 @@ O projeto está organizado em 4 Épicos principais, geridos como Issues no GitHu
 
 ---
 
-## 6. Ferramentas de Desenvolvimento e Gestão
+## 6. Configuração do Projeto GCP
+
+### Informações do Projeto:
+* **Nome:** Meal-AI Development
+* **Project ID:** meal-ai-development
+* **Email da conta:** tonimagalhaes.dev@gmail.com
+* **Orçamento:** R$50,00/mês com alertas configurados
+
+### APIs Ativadas:
+* Cloud Run API
+* Cloud Build API
+* Firebase Hosting API
+* Cloud SQL Admin API
+* Secret Manager API
+
+### Ambiente de Desenvolvimento:
+* **Sistema Operacional:** Windows
+* **Google Cloud CLI:** Instalado e configurado
+* **Projeto padrão configurado:** meal-ai-development
+
+## 7. Ferramentas de Desenvolvimento e Gestão
 
 | Categoria             | Ferramenta                                     |
 | --------------------- | ---------------------------------------------- |
@@ -90,13 +140,14 @@ O projeto está organizado em 4 Épicos principais, geridos como Issues no GitHu
 | Testes Unitários      | pytest                                         |
 | CI/CD                 | Google Cloud Build                             |
 | Plataforma de IA      | Google Vertex AI                               |
+| Cloud CLI             | Google Cloud CLI (Windows)                     |
 
-## 7. Estratégia de Qualidade e Métricas
+## 8. Estratégia de Qualidade e Métricas
 
 * **Testes:** Cobertura de testes unitários > 80% com `pytest`. Testes de integração automatizados em cada Pull Request.
 * **Métricas Chave:** API response time < 200ms, Uptime > 99.9%.
 
-## 8. Papel da IA no Desenvolvimento
+## 9. Papel da IA no Desenvolvimento
 
 * **Chat do Gemini:** Utilizado como assistente de programação ("pair programmer") para ajudar no desenvolvimento do código, resolução de erros e aprendizagem de conceitos.
 * **Google AI Studio:** Utilizado como um laboratório para desenhar, testar e refinar os prompts que serão usados na funcionalidade de geração de cardápios, antes de os implementar no código.
