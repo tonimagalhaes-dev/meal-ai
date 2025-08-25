@@ -1,0 +1,47 @@
+# docker-compose.yml
+
+services:
+  # --- Serviço do Backend (API FastAPI) ---
+  api:
+    build: ./backend
+    container_name: mealia_api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/app:/app/app
+    environment:
+      - DATABASE_URL=postgresql://user:password@db:5432/mealiadb
+      - ENVIRONMENT=development  # Ativa modo desenvolvimento com --reload
+    depends_on:
+      - db
+
+  # --- Serviço do Frontend (React App) ---
+  web:
+    build: ./frontend
+    container_name: mealia_web
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    # Força o servidor de desenvolvimento a usar o "polling" para detectar
+    # alterações de arquivos, o que é mais confiável no Docker/Windows.
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - WDS_SOCKET_PORT=0
+
+  # --- Serviço do Banco de Dados (PostgreSQL) ---
+  db:
+    image: postgres:13-alpine
+    container_name: mealia_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=mealiadb
+    ports:
+      - "5432:5432"
+
+volumes:
+  postgres_data:
