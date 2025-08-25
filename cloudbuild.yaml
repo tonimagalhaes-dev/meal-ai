@@ -55,7 +55,7 @@ steps:
 # Configurações do build (Otimizado para Free Tier)
 options:
   # Máquina padrão (gratuita nos primeiros 120 build-minutes/dia)
-  machineType: 'E2_STANDARD_2'
+  machineType: 'E2_HIGHCPU_8'
   # Logs básicos para economizar
   logging: CLOUD_LOGGING_ONLY
 
