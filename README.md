@@ -58,3 +58,4 @@ Se encontrar erros inesperados, especialmente relacionados com o uvicorn ou cach
 Depois de executar a limpeza, tente iniciar o ambiente novamente com docker-compose up \--build."# MealIA - Deploy Test" 
 "# MealIA - Deploy Test" 
 "# MealIA - Deploy Test" 
+"# Test Cloud Run API" 
