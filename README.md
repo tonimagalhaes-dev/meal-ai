@@ -59,3 +59,4 @@ Depois de executar a limpeza, tente iniciar o ambiente novamente com docker-comp
 "# MealIA - Deploy Test" 
 "# MealIA - Deploy Test" 
 "# Test Cloud Run API" 
+"# Test service account permissions" 
