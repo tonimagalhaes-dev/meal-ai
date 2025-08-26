@@ -59,7 +59,6 @@ steps:
         # Instala a versão mais recente do firebase-tools
         # Exporta o PATH para garantir que o firebase-tools seja encontrado
         mkdir -p /usr/local/bin/npm_modules
-        export PATH="/usr/local/bin/npm_modules/bin:$PATH"
         npm install firebase-tools@latest --prefix /usr/local/bin/npm_modules
         
         # Verifica a versão do firebase-tools (para depuração, se necessário)
