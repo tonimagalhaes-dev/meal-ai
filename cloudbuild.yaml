@@ -48,7 +48,7 @@ steps:
         npm run build
         npm install -g firebase-tools
         cd ..
-        firebase deploy --only hosting --project $PROJECT_ID --token "$$FIREBASE_TOKEN"
+        firebase deploy --only hosting --project meal-ai-development-c1604 
     secretEnv: ['FIREBASE_TOKEN']
     waitFor: ['-']
       # O waitFor: ['-'] indica que este passo pode ser executado em paralelo com outros passos, se necessário.
