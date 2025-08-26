@@ -20,7 +20,7 @@ steps:
   - name: 'gcr.io/cloud-builders/gcloud'
     args: [
       'run', 'deploy', 'mealia-backend',
-      '--image', 'us-central1-docker.pkg.dev/$PROJECT_ID/mealia-backend:$BUILD_ID',
+      '--image', 'us-central1-docker.pkg.dev/$PROJECT_ID/mealia-backend/backend:$BUILD_ID',
       '--platform', 'managed',
       '--region', 'us-central1',  # Região mais econômica
       '--allow-unauthenticated',
