@@ -59,6 +59,8 @@ steps:
         # Instala a versão mais recente do firebase-tools
         # Exporta o PATH para garantir que o firebase-tools seja encontrado
         mkdir -p /usr/local/bin/npm_modules
+        # O SEGREDDO ESTÁ AQUI: $$PATH para escapar o $
+        export PATH="/usr/local/bin/npm_modules/bin:$$PATH" 
         npm install firebase-tools@latest --prefix /usr/local/bin/npm_modules
         
         # Verifica a versão do firebase-tools (para depuração, se necessário)
@@ -67,10 +69,8 @@ steps:
         # Realiza o deploy no Firebase Hosting
         firebase deploy --only hosting --project $PROJECT_ID --token "$$FIREBASE_TOKEN" --site meal-ai-development-c1604
     secretEnv: ['FIREBASE_TOKEN']
-    # Se o deploy do frontend pode rodar em paralelo com o backend, remova o waitFor.
-    # Se ele depende do deploy do backend, adicione 'waitFor: ["deploy-backend"]'
-    waitFor: ['-'] # Começa assim que as dependências estiverem prontas (não depende de outros passos de build/deploy)
-
+    waitFor: ['-'] # Ou outras dependências
+    # Nota: Certifique-se de que o segredo FIREBASE_TOKEN está configurado no Secret Manager do GCP.
 
 # Configurações do build (Otimizado para Free Tier)
 options:
