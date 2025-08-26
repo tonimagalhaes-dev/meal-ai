@@ -51,7 +51,7 @@ steps:
         
         # --- Alterações Começam Aqui ---
         # Salva o diretório raiz do projeto antes de mudar
-        PROJECT_ROOT=$(pwd)/.. 
+        PROJECT_ROOT=$$(pwd)/.. 
 
         # Instala localmente o firebase-tools usando um diretório temporário
         mkdir -p /tmp/firebase-cli
