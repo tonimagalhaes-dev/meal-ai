@@ -13,7 +13,8 @@ steps:
 
   # Passo 2: Push da imagem para Container Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', '--all-tags', 'us-central1-docker.pkg.dev/$PROJECT_ID/mealia-backend']
+    args: ['push', '--all-tags', 'us-central1-docker.pkg.dev/$PROJECT_ID/mealia-backend/backend']
+
 
   # Passo 3: Deploy no Cloud Run (Otimizado para Free Tier)
   - name: 'gcr.io/cloud-builders/gcloud'
