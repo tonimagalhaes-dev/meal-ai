@@ -29,7 +29,7 @@ steps:
       '--cpu', '0.5',          # CPU mínima (mais barata)
       '--min-instances', '0',   # Escala para zero (sem custo quando não usado)
       '--max-instances', '3',   # Limite baixo
-      '--concurrency', '80',    # Otimiza uso de recursos
+#      '--concurrency', '80',    # Otimiza uso de recursos
       '--set-env-vars', 'ENVIRONMENT=production'
     ]
 
