@@ -32,7 +32,7 @@ steps:
     ]
 
   # Passo 4: Build do Frontend (React)
-  - name: 'node:18'
+  - name: 'node:22'
     entrypoint: 'bash'
     args:
       - '-c'
