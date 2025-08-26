@@ -6,23 +6,22 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: [
       'build', 
-      '-t', 'gcr.io/$PROJECT_ID/mealia-backend:$BUILD_ID',
-      '-t', 'gcr.io/$PROJECT_ID/mealia-backend:latest',
-      '--build-arg', 'ENVIRONMENT=production',
+      '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/mealia-backend/backend:$BUILD_ID',
+      '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/mealia-backend:latest',
       './backend'
     ]
 
   # Passo 2: Push da imagem para Container Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', '--all-tags', 'gcr.io/$PROJECT_ID/mealia-backend']
+    args: ['push', '--all-tags', 'us-central1-docker.pkg.dev/$PROJECT_ID/mealia-backend']
 
   # Passo 3: Deploy no Cloud Run (Otimizado para Free Tier)
   - name: 'gcr.io/cloud-builders/gcloud'
     args: [
       'run', 'deploy', 'mealia-backend',
-      '--image', 'gcr.io/$PROJECT_ID/mealia-backend:$BUILD_ID',
+      '--image', 'us-central1-docker.pkg.dev/$PROJECT_ID/mealia-backend:$BUILD_ID',
       '--platform', 'managed',
-      '--region', 'us-east1',  # Região com Free Tier mais generoso
+      '--region', 'us-central1',  # Região mais econômica
       '--allow-unauthenticated',
       '--port', '8000',
       '--memory', '256Mi',      # Reduzido para ficar no Free Tier
@@ -45,7 +44,7 @@ steps:
         echo "Frontend build concluído!"
 
   # Passo 5: Deploy no Firebase Hosting
-  - name: 'gcr.io/$PROJECT_ID/firebase'
+  - name: 'us-central1-docker.pkg.dev/$PROJECT_ID/firebase'
     args: [
       'deploy',
       '--only', 'hosting',
