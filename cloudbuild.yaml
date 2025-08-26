@@ -43,7 +43,7 @@ steps:
         echo "Frontend build concluído!"
 
   # Passo 5: Deploy no Firebase Hosting
-  - name: 'node:18'
+  - name: 'node:22'
     entrypoint: 'bash'
     args:
       - '-c'
