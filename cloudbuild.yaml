@@ -49,8 +49,8 @@ steps:
         npm run build
         echo "Frontend build concluído!"
         
-        # --- Alterações Começam Aqui ---
         # Salva o diretório raiz do projeto antes de mudar
+        # Use $$ para escapar o $ e evitar que o Cloud Build interprete como substituição
         PROJECT_ROOT=$$(pwd)/.. 
 
         # Instala localmente o firebase-tools usando um diretório temporário
@@ -59,14 +59,16 @@ steps:
         npm init -y # Inicializa um package.json
         npm install firebase-tools@latest # Instala firebase-tools localmente
 
-        # **Executa comandos firebase usando npm exec do DIRETÓRIO DE INSTALAÇÃO**
-        # Passa o diretório raiz do projeto explicitamente para o deploy
+        # Executa comandos firebase usando npm exec do DIRETÓRIO DE INSTALAÇÃO
         npm exec -- firebase --version
         
-        npm exec -- firebase deploy --only hosting --project $PROJECT_ID --token "$$FIREBASE_TOKEN" --site meal-ai-development-c1604 --public "$PROJECT_ROOT/frontend/build" --json "$PROJECT_ROOT/firebase.json"
-        # --- Alterações Terminam Aqui ---
+        # O $$ antes de PROJECT_ROOT também é importante aqui
+        npm exec -- firebase deploy --only hosting --project $$PROJECT_ID --token "$$FIREBASE_TOKEN" --site meal-ai-development-c1604 --public "$$PROJECT_ROOT/frontend/build" --json "$$PROJECT_ROOT/firebase.json"
+    # Usa o token do Secret Manager para autenticação
     secretEnv: ['FIREBASE_TOKEN']
     waitFor: ['-']
+    # O waitFor: ['-'] indica que este passo pode rodar em paralelo com outros, se necessário.
+
 
 
 # Configurações do build (Otimizado para Free Tier)
