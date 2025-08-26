@@ -47,7 +47,7 @@ steps:
         npm install
         npm run build
         echo "Frontend build concluído!"
-    waitFor: ['-']
+    waitFor: ['deploy-backend']
     # O waitFor: ['-'] indica que este passo pode ser executado em paralelo com outros passos, se necessário.
 
   # Passo 5: Deploy no Firebase Hosting
