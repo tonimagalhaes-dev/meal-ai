@@ -52,30 +52,28 @@ steps:
         # Salva o diretório raiz do projeto antes de mudar
         PROJECT_ROOT=$$(pwd)/.. # Variável de shell para a raiz do projeto
         
-        # --- Alterações Sugeridas ---
         # Instala firebase-tools em um diretório temporário específico
-        # Isso garante que a instalação seja isolada e controlada
         FIREBASE_TOOLS_DIR="/tmp/firebase-cli-temp"
-        mkdir -p $FIREBASE_TOOLS_DIR
-        cd $FIREBASE_TOOLS_DIR
+        mkdir -p $$FIREBASE_TOOLS_DIR # <--- Use $$ aqui
+        cd $$FIREBASE_TOOLS_DIR      # <--- Use $$ aqui
         npm init -y
         npm install firebase-tools@latest
         
         # Define o caminho completo para o executável firebase instalado
-        FIREBASE_BIN="$FIREBASE_TOOLS_DIR/node_modules/.bin/firebase"
+        FIREBASE_BIN="$$FIREBASE_TOOLS_DIR/node_modules/.bin/firebase" # <--- Use $$ aqui
 
         # Retorna para a raiz do seu projeto para que o firebase.json e os arquivos de build sejam acessíveis
         cd $$PROJECT_ROOT 
 
         # Agora, chame o executável firebase diretamente usando o caminho completo
         # E veja a versão para depuração
-        "$FIREBASE_BIN" --version
+        "$$FIREBASE_BIN" --version # <--- Use $$ aqui
         
         # Execute o deploy usando o caminho completo para o firebase binário
-        "$FIREBASE_BIN" deploy --only hosting --project $$PROJECT_ID --token "$$FIREBASE_TOKEN" --site meal-ai-development-c1604 --public "$$PROJECT_ROOT/frontend/build" --json "$$PROJECT_ROOT/firebase.json"
-        # --- Fim das Alterações Sugeridas ---
+        "$$FIREBASE_BIN" deploy --only hosting --project $$PROJECT_ID --token "$$FIREBASE_TOKEN" --site meal-ai-development-c1604 --public "$$PROJECT_ROOT/frontend/build" --json "$$PROJECT_ROOT/firebase.json" # <--- Use $$ aqui
     secretEnv: ['FIREBASE_TOKEN']
     waitFor: ['-']
+
     # O waitFor: ['-'] indica que este passo pode ser executado em paralelo com outros passos, se necessário.
 
 
