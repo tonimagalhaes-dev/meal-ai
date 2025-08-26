@@ -50,24 +50,33 @@ steps:
         echo "Frontend build concluído!"
         
         # Salva o diretório raiz do projeto antes de mudar
-        # Use $$ para escapar o $ e evitar que o Cloud Build interprete como substituição
-        PROJECT_ROOT=$$(pwd)/.. 
-
-        # Instala localmente o firebase-tools usando um diretório temporário
-        mkdir -p /tmp/firebase-cli
-        cd /tmp/firebase-cli
-        npm init -y # Inicializa um package.json
-        npm install firebase-tools@latest # Instala firebase-tools localmente
-
-        # Executa comandos firebase usando npm exec do DIRETÓRIO DE INSTALAÇÃO
-        npm exec -- firebase --version
+        PROJECT_ROOT=$$(pwd)/.. # Variável de shell para a raiz do projeto
         
-        # O $$ antes de PROJECT_ROOT também é importante aqui
-        npm exec -- firebase deploy --only hosting --project $$PROJECT_ID --token "$$FIREBASE_TOKEN" --site meal-ai-development-c1604 --public "$$PROJECT_ROOT/frontend/build" --json "$$PROJECT_ROOT/firebase.json"
-    # Usa o token do Secret Manager para autenticação
+        # --- Alterações Sugeridas ---
+        # Instala firebase-tools em um diretório temporário específico
+        # Isso garante que a instalação seja isolada e controlada
+        FIREBASE_TOOLS_DIR="/tmp/firebase-cli-temp"
+        mkdir -p $FIREBASE_TOOLS_DIR
+        cd $FIREBASE_TOOLS_DIR
+        npm init -y
+        npm install firebase-tools@latest
+        
+        # Define o caminho completo para o executável firebase instalado
+        FIREBASE_BIN="$FIREBASE_TOOLS_DIR/node_modules/.bin/firebase"
+
+        # Retorna para a raiz do seu projeto para que o firebase.json e os arquivos de build sejam acessíveis
+        cd $$PROJECT_ROOT 
+
+        # Agora, chame o executável firebase diretamente usando o caminho completo
+        # E veja a versão para depuração
+        "$FIREBASE_BIN" --version
+        
+        # Execute o deploy usando o caminho completo para o firebase binário
+        "$FIREBASE_BIN" deploy --only hosting --project $$PROJECT_ID --token "$$FIREBASE_TOKEN" --site meal-ai-development-c1604 --public "$$PROJECT_ROOT/frontend/build" --json "$$PROJECT_ROOT/firebase.json"
+        # --- Fim das Alterações Sugeridas ---
     secretEnv: ['FIREBASE_TOKEN']
     waitFor: ['-']
-    # O waitFor: ['-'] indica que este passo pode rodar em paralelo com outros, se necessário.
+    # O waitFor: ['-'] indica que este passo pode ser executado em paralelo com outros passos, se necessário.
 
 
 
