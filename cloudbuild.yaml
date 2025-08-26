@@ -45,35 +45,29 @@ steps:
       - |
         # Navega para o diretório do frontend
         cd frontend
-        
-        # Instala as dependências do frontend
         npm install
-        
-        # Constrói o aplicativo React
         npm run build
         echo "Frontend build concluído!"
         
-        # Retorna para a raiz do projeto para que o firebase.json seja encontrado
-        cd ..
-        
         # --- Alterações Começam Aqui ---
+        # Salva o diretório raiz do projeto antes de mudar
+        PROJECT_ROOT=$(pwd)/.. 
+
         # Instala localmente o firebase-tools usando um diretório temporário
         mkdir -p /tmp/firebase-cli
         cd /tmp/firebase-cli
         npm init -y # Inicializa um package.json
         npm install firebase-tools@latest # Instala firebase-tools localmente
 
-        # Retorna para a raiz do projeto para que o firebase.json seja encontrado para o deploy
-        cd /workspace # Assumindo /workspace é a raiz do seu projeto no Cloud Build
-        
-        # **Executa comandos firebase usando npm exec**
-        # Isso garante que a versão instalada localmente seja usada
+        # **Executa comandos firebase usando npm exec do DIRETÓRIO DE INSTALAÇÃO**
+        # Passa o diretório raiz do projeto explicitamente para o deploy
         npm exec -- firebase --version
         
-        npm exec -- firebase deploy --only hosting --project $PROJECT_ID --token "$$FIREBASE_TOKEN" --site meal-ai-development-c1604
+        npm exec -- firebase deploy --only hosting --project $PROJECT_ID --token "$$FIREBASE_TOKEN" --site meal-ai-development-c1604 --public "$PROJECT_ROOT/frontend/build" --json "$PROJECT_ROOT/firebase.json"
         # --- Alterações Terminam Aqui ---
     secretEnv: ['FIREBASE_TOKEN']
     waitFor: ['-']
+
 
 # Configurações do build (Otimizado para Free Tier)
 options:
