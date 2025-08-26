@@ -45,7 +45,7 @@ steps:
         echo "Frontend build concluído!"
 
   # Passo 5: Deploy no Firebase Hosting
-  - name: 'us-central1-docker.pkg.dev/$PROJECT_ID/firebase'
+  - name: 'gcr.io/cloud-builders/firebase'
     args: [
       'deploy',
       '--only', 'hosting',
