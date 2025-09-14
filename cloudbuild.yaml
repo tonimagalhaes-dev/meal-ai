@@ -64,7 +64,7 @@ steps:
         
         # Executar deploy do diretório raiz com configuração explícita
         cd /workspace
-        firebase deploy --only hosting --project meal-ai-development-c1604 --token "$$FIREBASE_TOKEN"
+        firebase deploy --only hosting --project meal-ai-development-c1604
     secretEnv: ['FIREBASE_TOKEN']
     waitFor: ['build-frontend']
 
