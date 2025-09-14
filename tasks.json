@@ -1,0 +1,14 @@
+ {
+     "version": "2.0.0",
+     "tasks": [
+         {
+             "label": "docker-compose-down",
+             "type": "docker-compose",
+             "compose": {
+                 "command": "down",
+                 "file": "${workspaceFolder}/docker-compose.yml",
+                 "options": "--volumes"
+             }
+         }
+     ]
+ }

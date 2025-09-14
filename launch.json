@@ -1,0 +1,20 @@
+ {
+   "version": "0.2.0",
+   "configurations": [
+     {
+       "name": "Docker: Iniciar Serviços (Compose)",
+       "type": "docker-compose",
+       "request": "launch",
+       "composeFilePath": "${workspaceFolder}/docker-compose.yml",
+       "composeFile": [
+         "docker-compose.yml"
+       ],
+       "serviceName": [
+         "api",
+         "web"
+       ],
+       "removeVolumes": true,
+       "preLaunchTask": "docker-compose-down"
+     }
+   ]
+ }
