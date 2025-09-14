@@ -62,9 +62,9 @@ steps:
         cp firebase.json /workspace/firebase.json
         cp .firebaserc /workspace/.firebaserc
         
-        # Executar deploy do diretório raiz com configuração explícita
+        # Executar deploy do diretório raiz com o alvo explícito
         cd /workspace
-        firebase deploy --only hosting --project meal-ai-development-c1604
+        firebase deploy --only hosting:meal-ai-app --project meal-ai-development-c1604
     secretEnv: ['FIREBASE_TOKEN']
     waitFor: ['build-frontend']
 

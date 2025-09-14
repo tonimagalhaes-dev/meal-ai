@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "target": "meal-ai-app",
     "public": "frontend/build",
     "ignore": [
       "firebase.json",

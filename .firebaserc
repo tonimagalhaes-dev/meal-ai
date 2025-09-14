@@ -1,5 +1,15 @@
 {
   "projects": {
     "default": "meal-ai-development-c1604"
-  }
+  },
+  "targets": {
+    "meal-ai-development-c1604": {
+      "hosting": {
+        "meal-ai-app": [
+          "meal-ai-development-c1604"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }
