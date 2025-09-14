@@ -1,6 +1,6 @@
 # Contexto do Projeto MealIA
 
-Este documento serve como um ponto de partida para contextualizar o assistente de IA sobre o estado atual, objetivos e stack tecnológico do projeto MealIA. **Última atualização: 25/08/2025.**
+Este documento serve como um ponto de partida para contextualizar o assistente de IA sobre o estado atual, objetivos e stack tecnológico do projeto MealIA. **Última atualização: 14/09/2025.**
 
 ## 1. Resumo do Projeto (O Quê e Por Quê)
 
@@ -14,8 +14,6 @@ Os objetivos principais do projeto são:
 * **Escalar para Produção:** Suportar mais de 1000 usuários simultâneos e implementar monitoramento completo.
 
 ## 3. Arquitetura e Stack de Tecnologia
-
-Decidimos começar o projeto do zero com o seguinte stack:
 
 * **Backend:** Python com o framework **FastAPI**.
 * **Frontend:** **React**.
@@ -42,18 +40,9 @@ O projeto está organizado em 4 Épicos principais, geridos como Issues no GitHu
 
 ### Progresso Atual
 * **21/08/2025:** A **User Story 1.1 foi concluída com sucesso!** O ambiente de desenvolvimento local está 100% funcional, com backend, frontend e banco de dados a correr de forma orquestrada pelo Docker Compose.
-
-* **25/08/2025:** **Progresso significativo na User Story 1.2!** Pipeline de CI/CD quase completo:
-  - ✅ Projeto GCP configurado: `meal-ai-development`
-  - ✅ Todas as APIs necessárias ativadas
-  - ✅ Orçamento configurado (R$50/mês com alertas)
-  - ✅ Google Cloud CLI instalado e configurado
-  - ✅ Service Account criado: `cloudrun-deployer@meal-ai-development.iam.gserviceaccount.com`
-  - ✅ Controle de ambiente implementado (dev/prod) no Dockerfile
-  - ✅ Firebase Hosting configurado
-  - ✅ Trigger do Cloud Build criado: `meal-ai-production-trigger`
-  - ✅ Repositório GitHub conectado: `tonimagalhaes-dev/meal-ai`
-  - 🚧 **Problema atual:** Build falhando por erro de repositório no Artifact Registry
+* **14/09/2025:** **Progresso significativo na User Story 1.2!**
+    * ✅ O problema com o Artifact Registry foi **resolvido**.
+    * 🚧 O pipeline de CI/CD agora falha no deploy do frontend devido a permissões.
 
 ---
 ### **✅ Story 1.1: Configuração do Ambiente de Desenvolvimento Local (CONCLUÍDA)**
@@ -66,13 +55,8 @@ O projeto está organizado em 4 Épicos principais, geridos como Issues no GitHu
 * [x] O back-end em FastAPI reinicia automaticamente ao salvar alterações no código (`hot reload`).
 * [x] O front-end em React reinicia automaticamente ao salvar alterações no código (`hot reload`).
 
-**Implementação finalizada:**
-- Dockerfile com controle de ambiente via variável `ENVIRONMENT`
-- docker-compose.yml configurado para modo development
-- Hot reload funcionando perfeitamente em ambos os ambientes
-
 ---
-### **🚧 Story 1.2: Setup do Projeto GCP e Deploy Contínuo no Cloud Run (90% COMPLETA)**
+### **🚧 Story 1.2: Setup do Projeto GCP e Deploy Contínuo no Cloud Run (95% COMPLETA)**
 
 **Como** desenvolvedor, **Eu quero** configurar o projeto na Google Cloud e um pipeline de CI/CD, **Para que** cada *push* para a branch principal (`main`) seja automaticamente testado e implantado, disponibilizando a aplicação na nuvem.
 
@@ -85,58 +69,23 @@ O projeto está organizado em 4 Épicos principais, geridos como Issues no GitHu
 
 **Progresso Detalhado:**
 
-**✅ Fase 1: Configuração Inicial do GCP - CONCLUÍDA**
-- Projeto GCP criado: `meal-ai-development`
-- APIs ativadas: Cloud Run, Cloud Build, Firebase Hosting, Cloud SQL, Secret Manager, Artifact Registry
-- Orçamento configurado: R$50/mês com alertas em 50%, 90% e 100%
-- Google Cloud CLI instalado e autenticado no Windows
-
-**✅ Fase 2: Service Accounts e Permissões - CONCLUÍDA**
-- Service Account criado: `cloudrun-deployer@meal-ai-development.iam.gserviceaccount.com`
-- Permissões concedidas:
-  - `roles/run.admin` (Cloud Run)
-  - `roles/storage.admin` (Container Registry)
-  - `roles/secretmanager.secretAccessor` (Secret Manager)
-  - `roles/logging.logWriter` (Cloud Logging)
-  - `roles/artifactregistry.admin` (Artifact Registry)
-
-**✅ Fase 3: Preparação do Código - CONCLUÍDA**
-- Dockerfile otimizado para produção com controle de ambiente
-- docker-compose.yml configurado com `ENVIRONMENT=development`
-- cloudbuild.yaml criado com pipeline completo
-- Configuração otimizada para Free Tier do GCP
-
-**✅ Fase 4: Firebase Hosting - CONCLUÍDA**
-- Firebase CLI instalado e configurado
-- Projeto Firebase habilitado: `meal-ai-development-c160u`
-- Arquivos firebase.json e .firebaserc criados
-- Configuração para deploy do frontend (pasta frontend/build)
+**✅ Fase 1-4: GCP, Service Accounts, Código e Firebase - CONCLUÍDAS**
 
 **🚧 Fase 5: Cloud Build Pipeline - EM PROGRESSO**
 - Trigger criado: `meal-ai-production-trigger`
 - Repositório GitHub conectado: `tonimagalhaes-dev/meal-ai`
-- **Problema atual:** Build falhando devido a repositório inexistente no Artifact Registry
+- **Problema atual:** O deploy do frontend no Firebase Hosting está falhando. A causa provável é a falta de permissão `roles/firebase.admin` para a Service Account `cloudrun-deployer`.
 
 **Próximos Passos para Completar:**
-1. Criar repositório no Artifact Registry:
-   ```cmd
-   gcloud artifacts repositories create mealia-backend --repository-format=docker --location=us-central1
-   ```
-
-2. Atualizar cloudbuild.yaml para usar Artifact Registry em vez de gcr.io
-
-3. Testar build completo do backend no Cloud Run
-
-4. Adicionar step do Firebase Hosting ao pipeline
-
-5. Validar deploy end-to-end
-
-**Arquivos de Configuração Atual:**
-- `backend/Dockerfile`: Com controle dev/prod via ENVIRONMENT
-- `docker-compose.yml`: Configurado para desenvolvimento
-- `cloudbuild.yaml`: Pipeline CI/CD (precisa ajuste para Artifact Registry)
-- `firebase.json`: Configuração do hosting
-- `.firebaserc`: Projeto padrão configurado
+1.  Adicionar a permissão `Firebase Admin` à Service Account:
+    ```bash
+    gcloud projects add-iam-policy-binding meal-ai-development \
+        --member="serviceAccount:cloudrun-deployer@meal-ai-development.iam.gserviceaccount.com" \
+        --role="roles/firebase.admin"
+    ```
+2.  Acionar a pipeline novamente com um novo commit na branch `main`.
+3.  Descomentar e testar os steps de build e deploy do backend no `cloudbuild.yaml`.
+4.  Validar o deploy end-to-end (frontend e backend).
 
 ---
 ### **Story 1.3: Conectividade com o Banco de Dados Cloud SQL**
@@ -156,7 +105,7 @@ O projeto está organizado em 4 Épicos principais, geridos como Issues no GitHu
 ### Informações do Projeto:
 * **Nome:** Meal-AI Development
 * **Project ID:** meal-ai-development
-* **Firebase Project ID:** meal-ai-development-c160u
+* **Firebase Project ID:** meal-ai-development-c1604
 * **Email da conta:** tonimagalhaes.dev@gmail.com
 * **Orçamento:** R$50,00/mês com alertas configurados
 
@@ -167,88 +116,51 @@ O projeto está organizado em 4 Épicos principais, geridos como Issues no GitHu
 * Cloud SQL Admin API
 * Secret Manager API
 * Artifact Registry API
-* Container Registry API (gcr.io - sendo migrado para Artifact Registry)
 
 ### Service Accounts:
 * **cloudrun-deployer@meal-ai-development.iam.gserviceaccount.com**
-  - roles/run.admin
-  - roles/storage.admin
-  - roles/secretmanager.secretAccessor
-  - roles/logging.logWriter
-  - roles/artifactregistry.admin
+    * `roles/run.admin`
+    * `roles/storage.admin`
+    * `roles/secretmanager.secretAccessor`
+    * `roles/logging.logWriter`
+    * `roles/artifactregistry.admin`
+    * **Pendente Adicionar:** `roles/firebase.admin`
 
 ### Repositório GitHub:
 * **URL:** https://github.com/tonimagalhaes-dev/meal-ai
-* **Branches:** 
-  - `develop` (desenvolvimento ativo)
-  - `main` (produção com deploy automático)
+* **Branches:**
+    * `develop` (desenvolvimento ativo)
+    * `main` (produção com deploy automático)
 * **Trigger Cloud Build:** meal-ai-production-trigger (monitora branch main)
-
-### Ambiente de Desenvolvimento:
-* **Sistema Operacional:** Windows
-* **Google Cloud CLI:** Instalado e configurado
-* **Projeto padrão configurado:** meal-ai-development
-* **Docker:** Ambiente local funcionando com hot reload
-* **Firebase CLI:** Configurado
 
 ## 7. Problemas Conhecidos e Soluções Pendentes
 
-### Problema Atual - Build Failure:
-**Erro:** `denied: gcr.io repo does not exist. Creating on push requires the artifactregistry.repositories.createOnPush permission`
+### Problema Anterior - Build Failure:
+* **Erro:** `denied: gcr.io repo does not exist...`
+* **Status:** **RESOLVIDO**. O problema foi corrigido com a criação de um repositório no Artifact Registry e a atualização do `cloudbuild.yaml`.
 
-**Causa:** O pipeline está tentando usar gcr.io (Container Registry) que está sendo descontinuado, mas o repositório não existe.
-
-**Solução Identificada:** 
-1. Criar repositório no Artifact Registry
-2. Migrar cloudbuild.yaml para usar `us-central1-docker.pkg.dev` em vez de `gcr.io`
-
-### Estratégia de Branches:
-- **develop:** Para desenvolvimento e testes
-- **main:** Para deploy automático em produção
-- Hot reload configurado apenas em ambiente de desenvolvimento
+### Problema Atual - Deploy do Frontend:
+* **Erro:** Falha no passo de deploy do Firebase Hosting.
+* **Causa Provável:** A Service Account não possui a permissão `roles/firebase.admin`.
+* **Solução Identificada:** Conceder a permissão necessária via comando `gcloud`.
 
 ## 8. Ferramentas de Desenvolvimento e Gestão
 
-| Categoria             | Ferramenta                                     | Status        |
-| --------------------- | ---------------------------------------------- | ------------- |
-| IDE                   | VS Code                                        | Configurado   |
-| Controlo de Versão    | Git + GitHub                                   | Ativo         |
-| Gestão de Projeto     | GitHub Projects (Issues para Épicos/Stories)  | Em uso        |
-| Ferramenta de BD      | DBeaver                                        | Disponível    |
-| Containerização       | Docker Desktop                                 | Funcionando   |
-| Testes Unitários      | pytest                                         | A implementar |
-| CI/CD                 | Google Cloud Build                             | 90% completo  |
-| Cloud CLI             | Google Cloud CLI (Windows)                     | Configurado   |
-| Firebase CLI          | firebase-tools                                 | Configurado   |
-| Container Registry    | Google Artifact Registry (us-central1)        | A configurar  |
+| Categoria          | Ferramenta                                     | Status      |
+| ------------------ | ---------------------------------------------- | ----------- |
+| IDE                | VS Code                                        | Configurado |
+| Controlo de Versão | Git + GitHub                                   | Ativo       |
+| Gestão de Projeto  | GitHub Projects (Issues para Épicos/Stories)   | Em uso      |
+| Ferramenta de BD   | DBeaver                                        | Disponível  |
+| Containerização    | Docker Desktop                                 | Funcionando |
+| Testes Unitários   | pytest                                         | A implementar|
+| CI/CD              | Google Cloud Build                             | 95% completo|
+| Cloud CLI          | Google Cloud CLI (Windows)                     | Configurado |
+| Firebase CLI       | firebase-tools                                 | Configurado |
+| Container Registry | Google Artifact Registry (us-central1)         | Configurado |
 
 ## 9. Estratégia de Qualidade e Métricas
 
 * **Testes:** Cobertura de testes unitários > 80% com `pytest`. Testes de integração automatizados em cada Pull Request.
 * **Métricas Chave:** API response time < 200ms, Uptime > 99.9%.
 * **Monitorização:** Cloud Logging e Cloud Monitoring configurados no pipeline.
-
-## 10. Papel da IA no Desenvolvimento
-
-* **Chat do Gemini:** Utilizado como assistente de programação ("pair programmer") para ajudar no desenvolvimento do código, resolução de erros e aprendizagem de conceitos durante User-Storie 1.1
-
-* **Claude (Anthropic):** Utilizado como assistente principal de desenvolvimento e arquitetura, ajudando na resolução de problemas complexos de infraestrutura e implementação usado na User-storie 1.2.
-
-* **Google AI Studio:** Utilizado como laboratório para desenhar, testar e refinar os prompts que serão usados na funcionalidade de geração de cardápios.
-
-## 11. Configuração de Custos e Free Tier
-
-### Recursos Configurados para Free Tier:
-- **Cloud Run:** 2M requests/mês, 400K GB-segundos/mês, 200K CPU-segundos/mês
-- **Cloud Build:** 120 build-minutes/dia
-- **Firebase Hosting:** 10GB storage, 10GB transfer/mês
-- **Artifact Registry:** 0.5GB storage gratuito
-- **Região otimizada:** us-central1 (melhor custo-benefício)
-
-### Alertas de Orçamento:
-- R$25,00 (50%) - Email alert
-- R$45,00 (90%) - Email alert  
-- R$50,00 (100%) - Email alert
-
-**Próxima Sessão:** Resolver o problema do Artifact Registry e completar o deploy automático do backend no Cloud Run.
-
