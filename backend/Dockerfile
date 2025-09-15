@@ -14,18 +14,24 @@ WORKDIR /app
 COPY --from=builder /opt/venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
-RUN useradd --create-home appuser
-USER appuser
-
-# Copia todo o código do backend, incluindo o start.sh
+# --- CORREÇÃO DE ORDEM ---
+# 1. Copia os ficheiros da aplicação como root
 COPY . .
 
+# 2. Cria o utilizador não-root
+RUN useradd --create-home appuser
+
+# 3. Dá a permissão de execução ao script e muda o dono de todos os ficheiros para o novo utilizador
+RUN chmod +x ./start.sh && chown -R appuser:appuser /app
+
+# 4. Muda para o utilizador não-root
+USER appuser
+
+# Expõe a porta em que a aplicação vai correr
 EXPOSE 8000
 
-# Variável de ambiente para controlar o modo (development/production)
-ENV ENVIRONMENT=development
+# Variável de ambiente para controlar o modo
+ENV ENVIRONMENT=production
 
-# --- CORREÇÃO AQUI ---
-# Torna o script de inicialização executável e define-o como o ponto de entrada.
-RUN chmod +x ./start.sh
+# Define o ponto de entrada para o nosso script
 ENTRYPOINT ["./start.sh"]
