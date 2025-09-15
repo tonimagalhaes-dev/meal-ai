@@ -5,9 +5,14 @@ psycopg2-binary
 alembic
 python-dotenv
 google-cloud-secret-manager
- 
+pydantic-settings
+
+## fastapi: O framework web que estamos a usar para construir a nossa API.
+## uvicorn[standard]: O servidor ASGI que executa a nossa aplicação FastAPI.
 ## sqlalchemy: É o ORM (Object-Relational Mapper) que nos permitirá interagir com o banco de dados usando objetos Python em vez de SQL puro.
 ## psycopg2-binary: É o "driver" que permite que a SQLAlchemy se comunique especificamente com o PostgreSQL.
 ## alembic: É a ferramenta que usaremos para gerir as migrações do esquema do banco de dados (criar tabelas, alterar colunas, etc.).
 ## python-dotenv: Ajuda a carregar variáveis de ambiente de um ficheiro .env para o desenvolvimento local.
 ## google-cloud-secret-manager: Biblioteca da Google para aceder a segredos (como a nossa senha do banco) de forma segura.
+## pydantic-settings: Extensão do Pydantic para gerir configurações e variáveis de ambiente de forma estruturada.
+
