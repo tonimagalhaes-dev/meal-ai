@@ -27,12 +27,13 @@ steps:
       '--platform', 'managed',
       '--region', 'us-central1',
       '--allow-unauthenticated',
+      # --- LINHA CRÍTICA A SER ADICIONADA ---
+      '--service-account', 'cloudrun-deployer@meal-ai-development.iam.gserviceaccount.com',
       '--port', '8000',
       '--memory', '256Mi',
       '--cpu', '0.5',
       '--min-instances', '0',
       '--max-instances', '3',
-      # --- LINHA CRÍTICA PARA A CONEXÃO COM O BANCO ---
       '--add-cloudsql-instances', 'meal-ai-development:us-central1:mealia-db',
       '--set-env-vars', 'ENVIRONMENT=production,PROJECT_ID=$PROJECT_ID'
     ]
