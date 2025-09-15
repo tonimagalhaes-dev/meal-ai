@@ -84,3 +84,4 @@ availableSecrets:
   secretManager:
   - versionName: projects/$PROJECT_ID/secrets/firebase-token/versions/latest
     env: 'FIREBASE_TOKEN'
+#build forced by commit to main branch
