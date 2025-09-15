@@ -5,10 +5,6 @@ from fastapi import FastAPI, Depends
 from sqlalchemy.orm import Session
 from app.db.database import engine, get_db, Base
 
-# Cria as tabelas no banco de dados (se não existirem)
-# Em um ambiente de produção real, você usaria Alembic para isso.
-Base.metadata.create_all(bind=engine)
-
 app = FastAPI(
     title="MealIA API",
     description="API para geração de cardápios semanais com IA.",
