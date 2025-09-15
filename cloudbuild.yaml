@@ -2,39 +2,41 @@
 # Pipeline de CI/CD para o MealIA no Google Cloud Platform
 
 steps:
-  # Passo 1: Build da imagem do Backend (FastAPI) - COMENTADO TEMPORARIAMENTE
-  # - id: 'build-backend'
-  #   name: 'gcr.io/cloud-builders/docker'
-  #   args: [
-  #     'build', 
-  #     '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/mealia-backend/backend:$BUILD_ID',
-  #     '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/mealia-backend/backend:latest',
-  #     './backend'
-  #   ]
+  # Passo 1: Build da imagem do Backend (FastAPI)
+  - id: 'build-backend'
+    name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'build', 
+      '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/mealia-backend/backend:$BUILD_ID',
+      '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/mealia-backend/backend:latest',
+      './backend'
+    ]
 
-  # Passo 2: Push da imagem para Artifact Registry - COMENTADO TEMPORARIAMENTE
-  # - id: 'push-backend'
-  #   name: 'gcr.io/cloud-builders/docker'
-  #   args: ['push', '--all-tags', 'us-central1-docker.pkg.dev/$PROJECT_ID/mealia-backend/backend']
-  #   waitFor: ['build-backend']
+  # Passo 2: Push da imagem para Artifact Registry
+  - id: 'push-backend'
+    name: 'gcr.io/cloud-builders/docker'
+    args: ['push', '--all-tags', 'us-central1-docker.pkg.dev/$PROJECT_ID/mealia-backend/backend']
+    waitFor: ['build-backend']
 
-  # Passo 3: Deploy no Cloud Run - COMENTADO TEMPORARIAMENTE
-  # - id: 'deploy-backend'
-  #   name: 'gcr.io/cloud-builders/gcloud'
-  #   args: [
-  #     'run', 'deploy', 'mealia-backend',
-  #     '--image', 'us-central1-docker.pkg.dev/$PROJECT_ID/mealia-backend/backend:$BUILD_ID',
-  #     '--platform', 'managed',
-  #     '--region', 'us-central1',
-  #     '--allow-unauthenticated',
-  #     '--port', '8000',
-  #     '--memory', '256Mi',
-  #     '--cpu', '0.5',
-  #     '--min-instances', '0',
-  #     '--max-instances', '3',
-  #     '--set-env-vars', 'ENVIRONMENT=production'
-  #   ]
-  #   waitFor: ['push-backend']
+  # Passo 3: Deploy no Cloud Run com conexão Cloud SQL
+  - id: 'deploy-backend'
+    name: 'gcr.io/cloud-builders/gcloud'
+    args: [
+      'run', 'deploy', 'mealia-backend',
+      '--image', 'us-central1-docker.pkg.dev/$PROJECT_ID/mealia-backend/backend:$BUILD_ID',
+      '--platform', 'managed',
+      '--region', 'us-central1',
+      '--allow-unauthenticated',
+      '--port', '8000',
+      '--memory', '256Mi',
+      '--cpu', '0.5',
+      '--min-instances', '0',
+      '--max-instances', '3',
+      # --- LINHA CRÍTICA PARA A CONEXÃO COM O BANCO ---
+      '--add-cloudsql-instances', 'meal-ai-development:us-central1:mealia-db',
+      '--set-env-vars', 'ENVIRONMENT=production,PROJECT_ID=$PROJECT_ID'
+    ]
+    waitFor: ['push-backend']
 
   # Passo 4: Build do Frontend (React)
   - id: 'build-frontend'
@@ -47,7 +49,7 @@ steps:
         npm install
         npm run build
         echo "Frontend build concluído!"
-    waitFor: ['-']
+    waitFor: ['deploy-backend'] # Espera o backend terminar para iniciar o build do front
 
   # Passo 5: Deploy no Firebase Hosting
   - id: 'deploy-frontend'  
@@ -73,7 +75,7 @@ options:
   machineType: 'E2_HIGHCPU_8'
   logging: CLOUD_LOGGING_ONLY
 
-timeout: '300s'
+timeout: '600s' # Aumentei o timeout para dar tempo ao deploy do backend
 
 substitutions:
   _REGION: 'us-central1'
