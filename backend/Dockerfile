@@ -48,4 +48,4 @@ EXPOSE 8000
 ENV ENVIRONMENT=development
 
 # Comando inline para iniciar conforme o ambiente
-CMD ["sh", "-c", "if [ \"$ENVIRONMENT\" = \"development\" ]; then echo 'Iniciando em modo DESENVOLVIMENTO...'; uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload; else echo 'Iniciando em modo PRODUCAO...'; uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 1; fi"]
+CMD ["sh", "-c", "if [ \"$ENVIRONMENT\" = \"development\" ]; then echo 'Iniciando em modo DESENVOLVIMENTO...'; uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload --app-dir /app; else echo 'Iniciando em modo PRODUCAO...'; uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 1 --app-dir /app; fi"]
