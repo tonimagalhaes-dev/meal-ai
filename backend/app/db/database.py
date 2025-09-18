@@ -17,6 +17,9 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 # Base para os nossos modelos ORM
 Base = declarative_base()
 
+# Importa todos os modelos para que a Base os reconheça
+from app.models import *
+
 # Dependência para injeção no FastAPI
 def get_db():
     db = SessionLocal()
