@@ -6,6 +6,10 @@ alembic
 python-dotenv
 google-cloud-secret-manager
 pydantic-settings
+pydantic-settings
+google-cloud-aiplatform
+langchain-core
+langchain-google-vertexai
 
 ## fastapi: O framework web que estamos a usar para construir a nossa API.
 ## uvicorn[standard]: O servidor ASGI que executa a nossa aplicação FastAPI.
