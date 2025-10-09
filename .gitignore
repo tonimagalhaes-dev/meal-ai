@@ -67,3 +67,10 @@ node_modules/
 
 # dataconnect generated files
 .dataconnect
+# Python cache
+__pycache__/
+*.pyc
+
+# Outras pastas e arquivos comuns a ignorar
+.env
+venv/
