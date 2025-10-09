@@ -5,6 +5,9 @@ from fastapi import FastAPI, Depends
 from sqlalchemy.orm import Session
 from app.db.database import engine, get_db, Base
 from app.services.menu_generator import generate_test_message
+import vertexai
+
+vertexai.init(project="meal-ai-development")
 
 app = FastAPI(
     title="MealIA API",

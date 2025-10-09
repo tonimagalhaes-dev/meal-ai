@@ -9,18 +9,12 @@ services:
       - "8000:8000"
     volumes:
       - ./backend/app:/app/app
-      # --- INÍCIO DA CORREÇÃO ---
-      # Caminho correto para credenciais no Windows
-      - type: bind
-        source: '%APPDATA%/gcloud/application_default_credentials.json'
-        target: /app/gcloud-credentials.json
-        read_only: true
-      # --- FIM DA CORREÇÃO ---
+      - /c/Users/tonim/AppData/Roaming/gcloud/application_default_credentials.json:/app/gcloud-credentials.json:ro
     environment:
       - DATABASE_URL=postgresql://user:password@db:5432/mealiadb
       - ENVIRONMENT=development
       - GOOGLE_APPLICATION_CREDENTIALS=/app/gcloud-credentials.json
-      - PROJECT_ID=meal-ai-development
+      - PROJECT_ID=meal-ai-meal-ai-development
     depends_on:
       - db
 

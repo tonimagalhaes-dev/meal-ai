@@ -105,7 +105,7 @@ O projeto está organizado em 4 Épicos principais, geridos como Issues no GitHu
 ### Informações do Projeto:
 * **Nome:** Meal-AI Development
 * **Project ID:** meal-ai-development
-* **Firebase Project ID:** meal-ai-development-c1604
+* **Firebase Project ID:** meal-ai-development
 * **Email da conta:** tonimagalhaes.dev@gmail.com
 * **Orçamento:** R$50,00/mês com alertas configurados
 

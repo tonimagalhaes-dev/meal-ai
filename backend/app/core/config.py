@@ -6,7 +6,7 @@ from google.cloud import secretmanager
 
 class Settings(BaseSettings):
     ENVIRONMENT: str = os.getenv("ENVIRONMENT", "development")
-    PROJECT_ID: str = os.getenv("PROJECT_ID", "meal-ai-development")
+    PROJECT_ID: str = os.getenv("PROJECT_ID", "mmeal-ai-development")
     
     # Configurações do Banco de Dados
     DB_USER: str = os.getenv("POSTGRES_USER", "user")
