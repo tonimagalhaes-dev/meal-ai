@@ -4,6 +4,10 @@
 from fastapi import FastAPI, Depends
 from sqlalchemy.orm import Session
 from app.db.database import engine, get_db, Base
+from app.services.menu_generator import generate_test_message
+import vertexai
+
+vertexai.init(project="meal-ai-development")
 
 app = FastAPI(
     title="MealIA API",
@@ -23,3 +27,12 @@ def test_db_connection(db: Session = Depends(get_db)):
         return {"status": "success", "message": "Conexão com o banco de dados bem-sucedida!"}
     except Exception as e:
         return {"status": "error", "message": f"Falha na conexão com o banco de dados: {e}"}
+    
+@app.get("/ai-test", tags=["AI"])
+def test_ai_connection():
+    """
+    Envia uma mensagem de teste para o Vertex AI para verificar a conectividade.
+    """
+    prompt = "Olá, IA! Me diga em uma única frase por que cozinhar é incrível."
+    ai_response = generate_test_message(prompt)
+    return {"prompt_enviado": prompt, "resposta_da_ia": ai_response}
